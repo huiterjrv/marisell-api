@@ -26,7 +26,6 @@ exports.createNewPermit = async (req,res) => {
 
     let x = []
 
-
     y.forEach(async e => {
         x.push(await PermitDB.createNewPermit(e))        
     });

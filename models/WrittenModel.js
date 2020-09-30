@@ -6,14 +6,34 @@ const commentary = {
     texto:String,
     voto:Boolean,
     fecha:Date,
-    idUsuario:String
+    idUsuario:{
+        type: String, 
+        ref: 'user'
+    }
 }
 
+const likeSchema = ({
+    idUsuario:{
+        type: String, 
+        ref: 'user'
+    },
+    voto:Boolean,
+    fecha:Date,
+    actualizado:Date
+})
+
 const writtenSchema = new Schema({
-    idUsuario:String,
-    idCategoria:{
+    usuario:{
+        type: String, 
+        ref: 'user'
+    },
+    categoria:{
         type: String, 
         ref: 'category'
+    },
+    genero:{
+        type: String, 
+        ref: 'kind'
     },
     texto:String,
     titulo:String,
@@ -21,6 +41,7 @@ const writtenSchema = new Schema({
     creado:Date,
     actualizado:Date,
     comentario:[commentary],
+    like:[likeSchema],
     estatus:Boolean
 })
 
@@ -32,6 +53,20 @@ const categorySchema = new Schema({
     estado:Boolean
 })
 
+const kindSchema = new Schema({
+    categoria:String,
+    creado:Date,
+    estado:Boolean
+})
+
+//---------------------tools----------------------------
+
+writtenSchema.statics.writtenQuery = async function (query) {
+
+    return ;
+
+}
+
 //-------------CONSULT---------------------
 
 /**
@@ -42,17 +77,17 @@ const categorySchema = new Schema({
  */
 writtenSchema.statics.getAllWritten= async function (searchCriteria = {}, wantedField = {}, num = '') {
 
-    return await this.find(searchCriteria, wantedField).populate('idCategoria').limit(num);
+    return await this.find(searchCriteria, wantedField).populate('categoria').populate('usuario').populate('genero').limit(num);
 
 }
 
-/**
- * get all the categories
- * @param {Object} searchCriteria The one that is given to you by default is set to set everything to you
- * @param {Object} wantedField Se pasa el criterio de busqueda
- * @param {Number} num Query limiter
- */
 categorySchema.statics.getAllCategory= async function (searchCriteria = {}, wantedField = {}, num = '') {
+
+    return await this.find(searchCriteria, wantedField).limit(num);
+
+}
+
+kindSchema.statics.getAllKind= async function (searchCriteria = {}, wantedField = {}, num = '') {
 
     return await this.find(searchCriteria, wantedField).limit(num);
 
@@ -71,10 +106,6 @@ writtenSchema.statics.createNewWritten = async function(fields) {
 
 }
 
-/**
- * creating a new category
- * @param {Object} fields category format object view database
- */
 categorySchema.statics.createNewCategory = async function(fields) {
 
     let newcategory = new this(fields);
@@ -82,6 +113,15 @@ categorySchema.statics.createNewCategory = async function(fields) {
 
 }
 
+kindSchema.statics.createNewKind = async function(fields) {
+
+    let newKind = new this(fields);
+    return newKind.save().catch(err => console.log('Ha ocurrido un error --> ',err))
+
+}
+
 exports.WrittenDB = mongoose.model('written', writtenSchema, 'written');
 
 exports.CategoryDB = mongoose.model('category', categorySchema, 'category');
+
+exports.KindDB = mongoose.model('kind',kindSchema,'kind')

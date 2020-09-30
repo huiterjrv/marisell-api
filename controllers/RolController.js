@@ -11,9 +11,9 @@ exports.showRol = async (req,res) => {
 exports.createNewRol = async (req,res) => {
 
     let y = {
-        nombre:'Vicitante',
-        descripcion:'Solo puede ver los escritos no puede hacer mas nada',
-        permisos:['5f706cdbdbe316368c8f0fa0'],
+        nombre:'Admin',
+        descripcion:'puede hacer todo ',
+        permisos:['5f706cdbdbe316368c8f0fa0','5f706cdbdbe316368c8f0fa1','5f706cdbdbe316368c8f0fa2','5f706cdbdbe316368c8f0fa3'],
         creado:new Date().toLocaleDateString(),
         actualizado:new Date().toLocaleDateString()
     }

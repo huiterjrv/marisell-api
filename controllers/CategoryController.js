@@ -11,7 +11,7 @@ exports.showCategory = async (req,res) => {
 exports.createNewCategory = async (req,res) => {
 
     let y = {
-        genero:'terror',
+        genero:'suspenso',
         color:'#f98',
         background:'#c29e3587',
         creado: new Date().toLocaleDateString(),
